@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Numen Capital — Compra y vende USDT sin fronteras</title>
+<meta name="description" content="Compra y vende USDT, el dólar digital, de forma rápida y segura en Colombia. Tasa en tiempo real, sin fronteras, para personas y empresas.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FBFCFB;--bg-2:#F2F6F3;--card:#FFFFFF;
+    --ink:#0C1F17;--ink-2:#1A3A2C;--body:#475A52;--muted:#839A8E;
+    --emerald:#0F9D58;--emerald-deep:#0A7D45;--emerald-soft:#E4F4EC;
+    --emerald-line:rgba(15,157,88,0.18);
+    --line:rgba(12,31,23,0.09);
+    --shadow:0 1px 3px rgba(12,31,23,0.04),0 8px 30px rgba(12,31,23,0.06);
+    --shadow-lg:0 1px 3px rgba(12,31,23,0.05),0 20px 50px rgba(12,31,23,0.10);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'Inter',sans-serif;color:var(--ink);background:var(--bg);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  h1,h2,h3{font-family:'Space Grotesk',sans-serif;font-weight:600;line-height:1.08;letter-spacing:-0.02em}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 28px}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:0.7rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--emerald-deep);font-weight:500}
+  .pill{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;background:var(--emerald-soft);border:1px solid var(--emerald-line);border-radius:100px;font-family:'JetBrains Mono',monospace;font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--emerald-deep);font-weight:500}
+  .pill .dot{width:6px;height:6px;border-radius:50%;background:var(--emerald);box-shadow:0 0 0 3px rgba(15,157,88,0.2);animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+  /* NAV */
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(251,252,251,0.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:16px 28px;max-width:1160px;margin:0 auto}
+  .brand{display:flex;align-items:center;gap:9px;text-decoration:none}
+  .brand-icon{position:relative;display:inline-flex;align-items:baseline}
+  .brand-wordmark{font-family:'Sora',sans-serif;font-weight:800;font-size:1.5rem;color:var(--ink);letter-spacing:-0.04em;line-height:1}
+  .brand-wordmark .dot{color:var(--emerald)}
+  .brand-spark{margin-left:1px;color:var(--emerald)}
+  .brand-spark svg{width:12px;height:12px;display:block}
+  .brand-name{font-family:'Sora',sans-serif;font-weight:600;font-size:1.2rem;color:var(--ink)}
+  .nav-links{display:flex;gap:30px;align-items:center}
+  .nav-links a{color:var(--body);text-decoration:none;font-size:0.9rem;font-weight:450;transition:color .2s}
+  .nav-links a:hover{color:var(--ink)}
+  .nav-cta{background:var(--ink)!important;color:#fff!important;padding:10px 18px;border-radius:8px;font-weight:500!important;transition:all .25s!important}
+  .nav-cta:hover{background:var(--emerald-deep)!important}
+  .nav-toggle{display:none;background:none;border:none;cursor:pointer;flex-direction:column;gap:5px}
+  .nav-toggle span{width:23px;height:2px;background:var(--ink);display:block;transition:.3s}
+
+  /* HERO */
+  .hero{padding:142px 0 80px;position:relative;overflow:hidden}
+  .hero::before{content:"";position:absolute;top:-10%;right:-5%;width:700px;height:700px;background:radial-gradient(circle,rgba(15,157,88,0.07),transparent 65%);pointer-events:none}
+  .hero-grid{display:grid;grid-template-columns:1.02fr 0.98fr;gap:48px;align-items:center;position:relative;z-index:2}
+  .hero-copy{max-width:560px}
+  .hero h1{font-size:clamp(2.5rem,5.2vw,4rem);margin:22px 0 22px;color:var(--ink)}
+  .hero h1 em{font-style:normal;color:var(--emerald-deep);position:relative;white-space:nowrap}
+  .hero h1 em::after{content:"";position:absolute;left:0;right:0;bottom:4px;height:10px;background:var(--emerald-soft);z-index:-1}
+  .hero p{font-size:clamp(1.04rem,2vw,1.2rem);color:var(--body);margin-bottom:30px;max-width:490px}
+  .hero-actions{display:flex;gap:13px;flex-wrap:wrap;align-items:center}
+  .btn{display:inline-flex;align-items:center;gap:9px;padding:15px 26px;border-radius:9px;text-decoration:none;font-size:0.95rem;font-weight:500;font-family:'Inter',sans-serif;transition:all .25s;cursor:pointer;border:1px solid transparent}
+  .btn svg{width:16px;height:16px}
+  .btn-primary{background:var(--ink);color:#fff}
+  .btn-primary:hover{background:var(--emerald-deep);transform:translateY(-2px);box-shadow:0 12px 28px rgba(15,157,88,0.22)}
+  .btn-ghost{color:var(--ink);border:1px solid var(--line);background:var(--card)}
+  .btn-ghost:hover{border-color:var(--emerald);color:var(--emerald-deep)}
+
+  /* RATE CARD (hero visual) */
+  .rate-card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:30px;box-shadow:var(--shadow-lg);position:relative;overflow:hidden}
+  .rate-card::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--emerald),var(--emerald-deep))}
+  .rate-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+  .rate-title{display:flex;align-items:center;gap:10px}
+  .rate-logo{width:38px;height:38px;border-radius:10px;background:var(--emerald-soft);display:flex;align-items:center;justify-content:center;color:var(--emerald-deep);font-weight:700;font-family:'Space Grotesk';font-size:0.95rem}
+  .rate-title b{font-family:'Space Grotesk';font-size:1.05rem;color:var(--ink);display:block}
+  .rate-title span{font-size:0.76rem;color:var(--muted)}
+  .rate-live{display:inline-flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:0.66rem;letter-spacing:0.08em;color:var(--emerald-deep);background:var(--emerald-soft);padding:5px 10px;border-radius:7px;font-weight:600}
+  .rate-live .d{width:6px;height:6px;border-radius:50%;background:var(--emerald);animation:pulse 1.5s infinite}
+  .rate-label{font-size:0.82rem;color:var(--muted);margin:22px 0 4px;font-family:'JetBrains Mono',monospace;letter-spacing:0.05em;text-transform:uppercase}
+  .rate-value{font-family:'Space Grotesk',sans-serif;font-size:3rem;font-weight:700;color:var(--ink);letter-spacing:-0.03em;line-height:1;display:flex;align-items:baseline;gap:8px}
+  .rate-value .cur{font-size:1.2rem;color:var(--emerald-deep);font-weight:600}
+  .rate-value .num{transition:opacity .3s}
+  .rate-value.updating .num{opacity:0.4}
+  .rate-sub{font-size:0.84rem;color:var(--body);margin-top:10px;display:flex;align-items:center;gap:7px}
+  .rate-sub .up{color:var(--emerald-deep);font-weight:600}
+  .rate-foot{margin-top:24px;padding-top:18px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+  .rate-foot span{font-size:0.74rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
+  .rate-cta{font-size:0.84rem;color:var(--emerald-deep);text-decoration:none;font-weight:600;display:inline-flex;align-items:center;gap:5px}
+  .rate-note{font-size:0.68rem;color:var(--muted);margin-top:12px;text-align:center;font-style:italic}
+
+  /* TRUST STRIP */
+  .strip{padding:32px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--bg-2)}
+  .strip-inner{display:flex;align-items:center;justify-content:center;gap:40px;flex-wrap:wrap}
+  .strip-item{display:flex;align-items:center;gap:10px;font-size:0.9rem;color:var(--body)}
+  .strip-item svg{width:18px;height:18px;color:var(--emerald-deep);flex-shrink:0}
+
+  /* SECTIONS */
+  section{padding:90px 0}
+  .section-head{max-width:640px;margin-bottom:52px}
+  .section-head.center{margin-left:auto;margin-right:auto;text-align:center}
+  .section-head h2{font-size:clamp(1.9rem,4vw,2.8rem);margin:14px 0 16px;color:var(--ink)}
+  .section-head p{color:var(--body);font-size:1.05rem}
+
+  /* QUE ES USDT */
+  .usdt{background:var(--bg-2)}
+  .usdt-grid{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:center}
+  .usdt-copy h2{font-size:clamp(1.8rem,3.5vw,2.5rem);margin:14px 0 18px;color:var(--ink)}
+  .usdt-copy p{color:var(--body);font-size:1.04rem;margin-bottom:18px}
+  .usdt-points{list-style:none;display:flex;flex-direction:column;gap:14px;margin-top:24px}
+  .usdt-points li{display:flex;align-items:flex-start;gap:13px;font-size:0.98rem;color:var(--ink-2)}
+  .usdt-points .ic{flex-shrink:0;width:32px;height:32px;border-radius:9px;background:var(--card);border:1px solid var(--emerald-line);display:flex;align-items:center;justify-content:center;color:var(--emerald-deep)}
+  .usdt-points .ic svg{width:17px;height:17px;stroke-width:1.8}
+  .usdt-points b{display:block;color:var(--ink);font-family:'Space Grotesk';font-weight:600;margin-bottom:2px}
+  .usdt-visual{background:linear-gradient(135deg,var(--ink),var(--ink-2));border-radius:20px;padding:40px;color:#fff;position:relative;overflow:hidden}
+  .usdt-visual::before{content:"";position:absolute;top:-30%;right:-10%;width:300px;height:300px;background:radial-gradient(circle,rgba(15,157,88,0.2),transparent 65%)}
+  .coin{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--emerald),var(--emerald-deep));display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk';font-weight:700;font-size:1.8rem;color:#fff;margin-bottom:24px;position:relative;z-index:2;box-shadow:0 8px 30px rgba(15,157,88,0.4)}
+  .usdt-visual h3{font-size:1.5rem;color:#fff;margin-bottom:12px;position:relative;z-index:2}
+  .usdt-visual p{color:rgba(255,255,255,0.7);font-size:0.96rem;position:relative;z-index:2;margin-bottom:0}
+  .usdt-eq{display:flex;align-items:center;gap:14px;margin-top:24px;padding-top:24px;border-top:1px solid rgba(255,255,255,0.12);position:relative;z-index:2}
+  .usdt-eq .one{font-family:'Space Grotesk';font-size:1.6rem;font-weight:600;color:#fff}
+  .usdt-eq .eq{color:var(--emerald);font-size:1.4rem}
+  .usdt-eq .dollar{font-family:'Space Grotesk';font-size:1.6rem;font-weight:600;color:#fff}
+
+  /* PASOS / COMO */
+  .steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .step{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:32px;position:relative;transition:all .3s}
+  .step:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--emerald-line)}
+  .step-n{width:40px;height:40px;border-radius:11px;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk';font-weight:700;font-size:1.1rem;margin-bottom:18px}
+  .step h3{font-size:1.2rem;margin-bottom:10px;color:var(--ink)}
+  .step p{color:var(--body);font-size:0.95rem}
+
+  /* PARA QUIEN */
+  .who{background:var(--bg-2)}
+  .who-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .who-card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:36px;transition:all .3s}
+  .who-card:hover{box-shadow:var(--shadow-lg);border-color:var(--emerald-line)}
+  .who-ic{width:52px;height:52px;border-radius:13px;background:var(--emerald-soft);display:flex;align-items:center;justify-content:center;color:var(--emerald-deep);margin-bottom:20px}
+  .who-ic svg{width:26px;height:26px;stroke-width:1.6}
+  .who-card h3{font-size:1.35rem;margin-bottom:12px;color:var(--ink)}
+  .who-card p{color:var(--body);font-size:0.97rem;margin-bottom:16px}
+  .who-list{list-style:none;display:flex;flex-direction:column;gap:9px}
+  .who-list li{display:flex;align-items:center;gap:9px;font-size:0.92rem;color:var(--ink-2)}
+  .who-list svg{width:15px;height:15px;color:var(--emerald-deep);flex-shrink:0}
+
+  /* TRUST band */
+  .trust{background:var(--ink);color:#fff;position:relative;overflow:hidden}
+  .trust::before{content:"";position:absolute;bottom:-30%;left:-5%;width:500px;height:500px;background:radial-gradient(circle,rgba(15,157,88,0.12),transparent 65%)}
+  .trust .section-head h2{color:#fff}
+  .trust .section-head p{color:rgba(255,255,255,0.7)}
+  .trust-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;position:relative;z-index:2}
+  .trust-card{padding:30px;border:1px solid rgba(255,255,255,0.1);border-radius:14px;background:rgba(255,255,255,0.02)}
+  .trust-card .ic{width:42px;height:42px;border-radius:11px;background:rgba(15,157,88,0.15);display:flex;align-items:center;justify-content:center;color:var(--emerald);margin-bottom:18px}
+  .trust-card .ic svg{width:22px;height:22px;stroke-width:1.6}
+  .trust-card h3{font-size:1.15rem;color:#fff;margin-bottom:10px}
+  .trust-card p{color:rgba(255,255,255,0.62);font-size:0.92rem}
+
+  /* FORM / COTIZAR */
+  .quote{background:var(--bg-2)}
+  .quote-card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:0;box-shadow:var(--shadow-lg);overflow:hidden;display:grid;grid-template-columns:0.85fr 1.15fr}
+  .quote-side{background:linear-gradient(160deg,var(--ink),var(--ink-2));padding:44px;color:#fff;position:relative;overflow:hidden}
+  .quote-side::before{content:"";position:absolute;bottom:-20%;right:-15%;width:280px;height:280px;background:radial-gradient(circle,rgba(15,157,88,0.2),transparent 65%)}
+  .quote-side h2{font-size:1.8rem;color:#fff;margin-bottom:16px;position:relative;z-index:2}
+  .quote-side p{color:rgba(255,255,255,0.72);font-size:0.98rem;position:relative;z-index:2;margin-bottom:28px}
+  .quote-feats{list-style:none;display:flex;flex-direction:column;gap:14px;position:relative;z-index:2}
+  .quote-feats li{display:flex;align-items:center;gap:11px;font-size:0.92rem;color:rgba(255,255,255,0.85)}
+  .quote-feats svg{width:18px;height:18px;color:var(--emerald);flex-shrink:0}
+  .quote-form{padding:44px}
+  .form-row{margin-bottom:18px}
+  .form-row label{display:block;font-size:0.84rem;font-weight:500;color:var(--ink-2);margin-bottom:7px;font-family:'Space Grotesk'}
+  .form-row input,.form-row select{width:100%;padding:13px 15px;border:1px solid var(--line);border-radius:10px;font-family:'Inter',sans-serif;font-size:0.95rem;color:var(--ink);background:var(--bg);transition:border-color .2s,box-shadow .2s}
+  .form-row input:focus,.form-row select:focus{outline:none;border-color:var(--emerald);box-shadow:0 0 0 3px rgba(15,157,88,0.12)}
+  .form-row input::placeholder{color:var(--muted)}
+  .toggle-group{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .toggle-opt{position:relative}
+  .toggle-opt input{position:absolute;opacity:0;width:0;height:0}
+  .toggle-opt label{display:flex;align-items:center;justify-content:center;gap:8px;padding:13px;border:1px solid var(--line);border-radius:10px;cursor:pointer;font-weight:500;color:var(--body);transition:all .2s;margin-bottom:0;font-family:'Inter'}
+  .toggle-opt input:checked+label{border-color:var(--emerald);background:var(--emerald-soft);color:var(--emerald-deep)}
+  .form-submit{width:100%;padding:15px;background:#25D366;color:#fff;border:none;border-radius:10px;font-family:'Inter',sans-serif;font-size:0.98rem;font-weight:600;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:9px;margin-top:6px}
+  .form-submit:hover{background:#1eb558;transform:translateY(-2px)}
+  .form-submit svg{width:19px;height:19px}
+  .form-note{font-size:0.78rem;color:var(--muted);text-align:center;margin-top:14px}
+
+  /* FAQ */
+  .faq-wrap{max-width:780px;margin:0 auto}
+  .faq-item{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:12px;overflow:hidden;transition:border-color .2s}
+  .faq-item[open]{border-color:var(--emerald-line)}
+  .faq-item summary{padding:22px 24px;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-weight:500;font-size:1.05rem;color:var(--ink);display:flex;justify-content:space-between;align-items:center;list-style:none;gap:16px}
+  .faq-item summary::-webkit-details-marker{display:none}
+  .faq-item summary .plus{width:22px;height:22px;flex-shrink:0;position:relative;transition:transform .3s}
+  .faq-item[open] summary .plus{transform:rotate(45deg)}
+  .faq-item summary .plus::before,.faq-item summary .plus::after{content:"";position:absolute;background:var(--emerald-deep);border-radius:2px}
+  .faq-item summary .plus::before{top:50%;left:2px;right:2px;height:2px;transform:translateY(-50%)}
+  .faq-item summary .plus::after{left:50%;top:2px;bottom:2px;width:2px;transform:translateX(-50%)}
+  .faq-body{padding:0 24px 22px;color:var(--body);font-size:0.97rem}
+
+  /* FOOTER */
+  footer{background:var(--ink);color:rgba(255,255,255,0.6);padding:54px 0 28px}
+  .foot-top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:32px;padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,0.1)}
+  .foot-brand{max-width:300px}
+  .foot-brand .brand-name{color:#fff}
+  .foot-brand p{color:rgba(255,255,255,0.5);font-size:0.9rem;margin-top:12px}
+  .foot-contact{display:flex;flex-direction:column;gap:11px}
+  .foot-contact a{color:rgba(255,255,255,0.7);text-decoration:none;font-size:0.92rem;display:flex;align-items:center;gap:9px;transition:color .2s}
+  .foot-contact a:hover{color:var(--emerald)}
+  .foot-contact svg{width:15px;height:15px;color:var(--emerald)}
+  .foot-bottom{padding-top:24px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:0.8rem;color:rgba(255,255,255,0.4)}
+  .foot-bottom .mono{font-family:'JetBrains Mono',monospace}
+  .foot-disc{font-size:0.74rem;color:rgba(255,255,255,0.35);margin-top:16px;max-width:560px;line-height:1.5}
+
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.visible{opacity:1;transform:none}
+
+  @media(max-width:920px){
+    .nav-links{position:fixed;top:0;right:-100%;height:100vh;width:74%;max-width:300px;background:var(--card);flex-direction:column;justify-content:center;gap:26px;transition:right .35s;box-shadow:-10px 0 40px rgba(0,0,0,0.1)}
+    .nav-links.open{right:0}
+    .nav-toggle{display:flex}
+    .hero-grid{grid-template-columns:1fr;gap:40px}
+    .usdt-grid{grid-template-columns:1fr;gap:36px}
+    .steps-grid{grid-template-columns:1fr}
+    .who-grid{grid-template-columns:1fr}
+    .trust-grid{grid-template-columns:1fr}
+    .quote-card{grid-template-columns:1fr}
+    .quote-side{padding:36px}
+    .quote-form{padding:36px}
+  }
+  @media(max-width:520px){
+    .wrap{padding:0 20px}
+    .nav-inner{padding:14px 20px}
+    .hero{padding:118px 0 60px}
+    section{padding:64px 0}
+    .strip-inner{gap:20px}
+    .rate-value{font-size:2.4rem}
+    .quote-side,.quote-form{padding:28px}
+  }
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="#inicio" class="brand"><span class="brand-wordmark">numen<span class="dot">.</span></span><span class="brand-spark"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg></span></a>
+    <div class="nav-links" id="navLinks">
+      <a href="#que-es">Qué es USDT</a>
+      <a href="#como">Cómo funciona</a>
+      <a href="#para-quien">Para quién</a>
+      <a href="#faq">Preguntas</a>
+      <a href="#cotizar" class="nav-cta">Cotizar ahora</a>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Menú"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="inicio">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <span class="pill"><span class="dot"></span>Dólar digital · USDT · Colombia</span>
+      <h1>Compra y vende USDT <em>sin fronteras</em>.</h1>
+      <p>Numen Capital te permite comprar y vender USDT —el dólar digital— de forma rápida, segura y al mejor precio. Para personas y empresas que mueven valor sin límites.</p>
+      <div class="hero-actions">
+        <a href="#cotizar" class="btn btn-primary">
+          Quiero cotizar
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12h14M13 6l6 6-6 6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#que-es" class="btn btn-ghost">¿Qué es USDT?</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="rate-card">
+        <div class="rate-head">
+          <div class="rate-title">
+            <div class="rate-logo">₮</div>
+            <div><b>USDT / COP</b><span>Tether · Dólar digital</span></div>
+          </div>
+          <span class="rate-live"><span class="d"></span>EN VIVO</span>
+        </div>
+        <div class="rate-label">Precio de venta hoy</div>
+        <div class="rate-value" id="rateValue">
+          <span class="cur">COP</span><span class="num" id="rateNum">—</span>
+        </div>
+        <div class="rate-sub">Por cada <span class="up">1 USDT</span> · actualizado en tiempo real</div>
+        <div class="rate-foot">
+          <span id="rateTime">Cargando precio…</span>
+          <a href="#cotizar" class="rate-cta">Comprar ahora →</a>
+        </div>
+        <div class="rate-note" id="rateNote"></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- STRIP -->
+<div class="strip">
+  <div class="wrap strip-inner">
+    <div class="strip-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Operación en segundos</div>
+    <div class="strip-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6l8-4z"/></svg>Transacciones seguras</div>
+    <div class="strip-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 010 20M12 2a15 15 0 000 20"/></svg>Sin fronteras</div>
+    <div class="strip-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Disponible 24/7</div>
+  </div>
+</div>
+
+<!-- QUE ES USDT -->
+<section class="usdt" id="que-es">
+  <div class="wrap">
+    <div class="usdt-grid">
+      <div class="usdt-copy reveal">
+        <span class="eyebrow">Antes de empezar</span>
+        <h2>¿Qué es USDT y por qué importa?</h2>
+        <p>USDT (Tether) es una <b>moneda digital estable</b>: su valor siempre equivale a un dólar estadounidense. A diferencia de otras criptomonedas, no sube ni baja bruscamente.</p>
+        <p>Es la forma más práctica de tener dólares digitales: los mueves al instante, sin fronteras y sin la volatilidad del mercado cripto tradicional.</p>
+        <ul class="usdt-points">
+          <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></span><div><b>Estable como el dólar</b>1 USDT = 1 USD, siempre. Sin sorpresas.</div></li>
+          <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></span><div><b>Rápido y sin fronteras</b>Envía y recibe valor en segundos a cualquier lugar.</div></li>
+          <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6l8-4z"/></svg></span><div><b>Ideal para proteger valor</b>Resguarda tu dinero en dólares digitales.</div></li>
+        </ul>
+      </div>
+      <div class="usdt-visual reveal">
+        <div class="coin">₮</div>
+        <h3>El dólar, en digital</h3>
+        <p>USDT te da el respaldo y la estabilidad del dólar, con la velocidad y libertad de lo digital. Es dinero que se mueve a la velocidad de internet.</p>
+        <div class="usdt-eq">
+          <span class="one">1 USDT</span>
+          <span class="eq">=</span>
+          <span class="dollar">$1 USD</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMO FUNCIONA -->
+<section id="como">
+  <div class="wrap">
+    <div class="section-head center reveal">
+      <span class="eyebrow">Cómo funciona</span>
+      <h2>Comprar o vender, en 3 pasos</h2>
+      <p>Sin complicaciones, sin letra pequeña. Te acompañamos en cada operación.</p>
+    </div>
+    <div class="steps-grid reveal">
+      <div class="step">
+        <div class="step-n">1</div>
+        <h3>Cotiza tu operación</h3>
+        <p>Dinos cuánto quieres comprar o vender. Te damos el precio del momento, claro y al instante.</p>
+      </div>
+      <div class="step">
+        <div class="step-n">2</div>
+        <h3>Confirmamos y validamos</h3>
+        <p>Verificamos cada detalle en tiempo real. Tu operación es segura de principio a fin.</p>
+      </div>
+      <div class="step">
+        <div class="step-n">3</div>
+        <h3>Recibes tus USDT o tu dinero</h3>
+        <p>En segundos. Rápido, seguro y con confirmación inmediata para tu tranquilidad.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARA QUIEN -->
+<section class="who" id="para-quien">
+  <div class="wrap">
+    <div class="section-head center reveal">
+      <span class="eyebrow">Para quién</span>
+      <h2>Hecho para ti, seas quien seas</h2>
+      <p>Personas y empresas confían en Numen Capital para mover su valor sin fronteras.</p>
+    </div>
+    <div class="who-grid reveal">
+      <div class="who-card">
+        <div class="who-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 016-6h4a6 6 0 016 6v1"/></svg></div>
+        <h3>Para personas</h3>
+        <p>Compra USDT para proteger tus ahorros en dólares digitales, recibir pagos del exterior o invertir. Fácil y al alcance de todos.</p>
+        <ul class="who-list">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Ahorra en dólares digitales</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Recibe pagos del exterior</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Atención personalizada</li>
+        </ul>
+      </div>
+      <div class="who-card">
+        <div class="who-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 9h.01M9 13h.01M9 17h.01M15 9h.01M15 13h.01M15 17h.01"/></svg></div>
+        <h3>Para empresas</h3>
+        <p>Mueve capital sin fronteras, paga proveedores internacionales o gestiona tu tesorería en dólares digitales con respaldo y agilidad.</p>
+        <ul class="who-list">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Pagos internacionales ágiles</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Volúmenes corporativos</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Tasas preferenciales</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST -->
+<section class="trust">
+  <div class="wrap">
+    <div class="section-head center reveal">
+      <span class="eyebrow" style="color:var(--emerald)">Por qué confiar en Numen</span>
+      <h2>Tu seguridad es lo primero</h2>
+      <p>Construimos cada proceso pensando en seguridad, transparencia y confianza.</p>
+    </div>
+    <div class="trust-grid reveal">
+      <div class="trust-card">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6l8-4z"/></svg></div>
+        <h3>Operaciones verificadas</h3>
+        <p>Cada transacción se confirma antes de completarse. Nada se libera sin validación.</p>
+      </div>
+      <div class="trust-card">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+        <h3>Rapidez real</h3>
+        <p>Operaciones en segundos, disponibles 24/7. Tu valor se mueve cuando lo necesitas.</p>
+      </div>
+      <div class="trust-card">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></div>
+        <h3>Precios transparentes</h3>
+        <p>El precio que ves es el que pagas. Sin comisiones ocultas ni sorpresas.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COTIZAR / FORM -->
+<section class="quote" id="cotizar">
+  <div class="wrap">
+    <div class="quote-card reveal">
+      <div class="quote-side">
+        <h2>Cotiza tu operación ahora</h2>
+        <p>Llena el formulario y te contactamos al instante por WhatsApp con tu cotización personalizada.</p>
+        <ul class="quote-feats">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>Respuesta inmediata</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>Sin compromiso</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>Mejor precio del mercado</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>Atención personalizada</li>
+        </ul>
+      </div>
+      <div class="quote-form">
+        <div class="form-row">
+          <label>¿Qué quieres hacer?</label>
+          <div class="toggle-group">
+            <div class="toggle-opt">
+              <input type="radio" name="op" id="op-buy" value="comprar" checked>
+              <label for="op-buy">Comprar USDT</label>
+            </div>
+            <div class="toggle-opt">
+              <input type="radio" name="op" id="op-sell" value="vender">
+              <label for="op-sell">Vender USDT</label>
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <label for="f-name">Tu nombre</label>
+          <input type="text" id="f-name" placeholder="Ej. Marco Molina">
+        </div>
+        <div class="form-row">
+          <label for="f-amount">Monto aproximado (USDT o COP)</label>
+          <input type="text" id="f-amount" placeholder="Ej. 500 USDT o 2.000.000 COP">
+        </div>
+        <div class="form-row">
+          <label for="f-phone">Tu WhatsApp</label>
+          <input type="tel" id="f-phone" placeholder="Ej. 300 123 4567">
+        </div>
+        <button class="form-submit" onclick="enviarCotizacion()">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.6.1-.2.3-.7.9-.8 1-.2.2-.3.2-.6.1-1.5-.7-2.4-1.3-3.4-3-.3-.4.3-.4.7-1.3.1-.2 0-.4 0-.5 0-.1-.6-1.5-.8-2-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3 4.8 4.2.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.4.2-.6.2-1.2.2-1.3-.1-.1-.3-.2-.6-.3z M12 2a10 10 0 00-8.6 15l-1.3 4.7L7 20.4A10 10 0 1012 2z"/></svg>
+          Enviar por WhatsApp
+        </button>
+        <p class="form-note">Te responderemos lo antes posible con tu cotización.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq" id="faq">
+  <div class="wrap faq-wrap">
+    <div class="section-head center reveal">
+      <span class="eyebrow">Preguntas frecuentes</span>
+      <h2>Lo que necesitas saber</h2>
+    </div>
+    <div class="reveal">
+      <details class="faq-item">
+        <summary>¿Qué es USDT exactamente?<span class="plus"></span></summary>
+        <div class="faq-body">USDT (Tether) es una moneda digital estable cuyo valor siempre equivale a un dólar estadounidense. Te permite tener dólares en formato digital, moverlos al instante y sin fronteras, sin la volatilidad de otras criptomonedas.</div>
+      </details>
+      <details class="faq-item">
+        <summary>¿Cómo compro o vendo con Numen Capital?<span class="plus"></span></summary>
+        <div class="faq-body">Muy simple: cotiza tu operación en el formulario o escríbenos por WhatsApp, confirmamos los detalles, y completamos la operación en segundos. Te acompañamos en todo el proceso.</div>
+      </details>
+      <details class="faq-item">
+        <summary>¿Qué tan rápido es la operación?<span class="plus"></span></summary>
+        <div class="faq-body">La mayoría de operaciones se completan en segundos una vez confirmados los datos. Operamos 24/7, sin depender de horarios bancarios.</div>
+      </details>
+      <details class="faq-item">
+        <summary>¿Es seguro operar con ustedes?<span class="plus"></span></summary>
+        <div class="faq-body">Sí. Cada transacción se verifica antes de completarse, con validación en tiempo real. Nada se libera sin confirmación, protegiendo a todas las partes de la operación.</div>
+      </details>
+      <details class="faq-item">
+        <summary>¿Manejan comisiones ocultas?<span class="plus"></span></summary>
+        <div class="faq-body">No. El precio que te cotizamos es claro y transparente, conocido antes de cada operación. Sin sorpresas ni cargos escondidos.</div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <a href="#inicio" class="brand"><span class="brand-wordmark" style="color:#fff">numen<span class="dot" style="color:var(--emerald)">.</span></span><span class="brand-spark"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg></span></a>
+        <p>Compra y vende USDT —el dólar digital— de forma rápida, segura y sin fronteras.</p>
+      </div>
+      <div class="foot-contact">
+        <a href="mailto:contacto@numencapital.co"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>contacto@numencapital.co</a>
+        <a href="https://wa.me/573104661300" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.6.1-.2.3-.7.9-.8 1-.2.2-.3.2-.6.1-1.5-.7-2.4-1.3-3.4-3-.3-.4.3-.4.7-1.3.1-.2 0-.4 0-.5 0-.1-.6-1.5-.8-2-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3 4.8 4.2.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.4.2-.6.2-1.2.2-1.3z"/></svg>WhatsApp</a>
+      </div>
+    </div>
+    <p class="foot-disc">Numen Capital facilita operaciones de compra y venta de activos digitales (USDT). Los precios son referenciales y pueden variar según las condiciones del mercado al momento de cada operación. USDT es una moneda estable emitida por Tether Limited.</p>
+    <div class="foot-bottom">
+      <span>© 2026 Numen Capital. Todos los derechos reservados.</span>
+      <span style="display:flex;gap:20px;flex-wrap:wrap;align-items:center">
+        <a href="terminos.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Términos y Condiciones</a>
+        <a href="privacidad.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Política de Privacidad</a>
+        <span class="mono">numencapital.co</span>
+      </span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ===== NAV =====
+  const toggle=document.getElementById('navToggle');
+  const links=document.getElementById('navLinks');
+  toggle.addEventListener('click',()=>links.classList.toggle('open'));
+  links.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>links.classList.remove('open')));
+
+  // ===== REVEAL =====
+  const obs=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}})},{threshold:0.12});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+  // ============================================================
+  // ===== TASA EN VIVO — USDT/COP desde Binance P2P =====
+  // ============================================================
+  //
+  // La tasa real la calcula la función serverless en /functions/api/tasa.js
+  // (ahí está tu margen de $30 y el precio de respaldo del servidor).
+  //
+  // >>> Este PRECIO_RESPALDO es solo para cuando pruebas el archivo en LOCAL <<<
+  // >>> (sin servidor). En producción manda el de la función. <<<
+  const PRECIO_RESPALDO = 4150;   // respaldo solo para pruebas locales
+  const REFRESCO_MS = 30000;      // 30 segundos
+  //
+  // ============================================================
+
+  const rateNum = document.getElementById('rateNum');
+  const rateTime = document.getElementById('rateTime');
+  const rateNote = document.getElementById('rateNote');
+  const rateValue = document.getElementById('rateValue');
+
+  function formatCOP(n){
+    return Math.round(n).toLocaleString('es-CO');
+  }
+
+  function setRate(precio, enVivo){
+    rateValue.classList.add('updating');
+    setTimeout(()=>{
+      rateNum.textContent = formatCOP(precio);
+      rateValue.classList.remove('updating');
+    },180);
+    const now = new Date();
+    const hh = now.getHours().toString().padStart(2,'0');
+    const mm = now.getMinutes().toString().padStart(2,'0');
+    if(enVivo){
+      rateTime.textContent = 'Actualizado ' + hh + ':' + mm;
+      rateNote.textContent = '';
+    } else {
+      rateTime.textContent = 'Precio referencial';
+      rateNote.textContent = 'Precio referencial — escríbenos para confirmar la tasa del momento.';
+    }
+  }
+
+  // La web llama a NUESTRA propia función serverless (/api/tasa),
+  // que corre en el servidor de Cloudflare y consulta Binance sin bloqueos.
+  async function actualizarTasa(){
+    try{
+      const r = await fetch("/api/tasa", { cache: "no-store" });
+      if(!r.ok) throw new Error("HTTP "+r.status);
+      const j = await r.json();
+      if(j && j.precio){
+        setRate(j.precio, j.enVivo === true);
+      } else {
+        throw new Error("Respuesta sin precio");
+      }
+    }catch(err){
+      // Si la función no responde (ej. probando en local), usar respaldo
+      console.warn("Tasa no disponible:", err.message);
+      setRate(PRECIO_RESPALDO, false);
+    }
+  }
+
+  // Primera carga + refresco cada 30s
+  actualizarTasa();
+  setInterval(actualizarTasa, REFRESCO_MS);
+
+  // ============================================================
+  // ===== FORMULARIO -> WhatsApp =====
+  // ============================================================
+  const WHATSAPP_NUM = "573104661300"; // <-- CAMBIA AQUÍ tu número de WhatsApp
+
+  function enviarCotizacion(){
+    const op = document.querySelector('input[name="op"]:checked').value;
+    const name = document.getElementById('f-name').value.trim();
+    const amount = document.getElementById('f-amount').value.trim();
+    const phone = document.getElementById('f-phone').value.trim();
+
+    let msg = "Hola Numen Capital 👋, quiero *" + op + " USDT*.";
+    if(name) msg += "%0A%0A*Nombre:* " + encodeURIComponent(name);
+    if(amount) msg += "%0A*Monto:* " + encodeURIComponent(amount);
+    if(phone) msg += "%0A*WhatsApp:* " + encodeURIComponent(phone);
+    msg += "%0A%0A¿Me pueden cotizar?";
+
+    const url = "https://wa.me/" + WHATSAPP_NUM + "?text=" + msg;
+    window.open(url, "_blank");
+  }
+</script>
+</body>
+</html>
