@@ -1,94 +1,75 @@
 // ============================================================
-// FUNCIÓN SERVERLESS — Tasa USDT/COP desde Binance P2P
+// FUNCION SERVERLESS — Tasa USDT/COP en vivo (CriptoYa)
 // ============================================================
-// Esta función corre en el servidor de Cloudflare (no en el navegador),
-// por eso Binance NO la bloquea como bloquea las consultas del navegador.
-//
-// Endpoint resultante: https://tudominio.co/api/tasa
-//
-// LÓGICA: toma el MAYOR precio de compra del P2P de Binance Colombia
-//         y le suma el MARGEN ($30 COP) = tu precio de venta.
+// Toma el precio de COMPRA (bid) de Binance P2P en Colombia
+// desde CriptoYa y le suma el MARGEN ($30) = tu precio de venta.
 // ============================================================
 
-const MARGEN = 30;          // <-- Tu margen: $30 COP sobre el mayor precio de compra
-const PRECIO_RESPALDO = 4150; // <-- Precio de respaldo si Binance no responde
+const MARGEN = 30;
+const PRECIO_RESPALDO = 4150;
 
 export async function onRequest(context) {
-  // Headers para permitir que tu web llame a esta función
-  const corsHeaders = {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "GET, OPTIONS",
-    "Content-Type": "application/json",
-    "Cache-Control": "no-store"
-  };
+    const corsHeaders = {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET, OPTIONS",
+          "Content-Type": "application/json",
+          "Cache-Control": "no-store"
+    };
 
-  // Responder a preflight CORS
   if (context.request.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
+        return new Response(null, { headers: corsHeaders });
   }
 
-  const payload = {
-    asset: "USDT",
-    fiat: "COP",
-    tradeType: "BUY",   // anuncios de compra → tomamos el mayor (mejor bid)
-    page: 1,
-    rows: 10,
-    payTypes: [],
-    publisherType: null
-  };
-
   try {
-    const resp = await fetch(
-      "https://p2p.binance.com/bapi/c2c/v2/friendly/c2c/adv/search",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36",
-          "Accept": "*/*",
-          "Origin": "https://p2p.binance.com",
-          "Referer": "https://p2p.binance.com/en/trade/all-payments/USDT?fiat=COP"
-        },
-        body: JSON.stringify(payload)
+        const resp = await fetch("https://criptoya.com/api/USDT/COP/1", {
+                headers: { "Accept": "application/json" }
+        });
+        if (!resp.ok) throw new Error("CriptoYa HTTP " + resp.status);
+
+      const data = await resp.json();
+        let precioCompra = null;
+        let fuente = "";
+
+      if (data.binancep2p && data.binancep2p.bid) {
+              precioCompra = parseFloat(data.binancep2p.bid);
+              fuente = "Binance P2P";
+      } else {
+              const keys = ["okexp2p","bybitp2p","kucoinp2p","bitgetp2p","bingxp2p","mexcp2p"];
+              let mejor = 0;
+              for (const k of keys) {
+                        if (data[k] && data[k].bid) {
+                                    const b = parseFloat(data[k].bid);
+                                    if (b > mejor) { mejor = b; fuente = k; }
+                        }
+              }
+              if (mejor > 0) precioCompra = mejor;
       }
-    );
 
-    if (!resp.ok) throw new Error("Binance HTTP " + resp.status);
+      if (!precioCompra) throw new Error("Sin precio disponible");
 
-    const data = await resp.json();
-    if (!data.data || !data.data.length) throw new Error("Sin datos de Binance");
+      const precioVenta = Math.round(precioCompra + MARGEN);
 
-    // Extraer todos los precios y tomar el mayor (mejor precio de compra)
-    const precios = data.data
-      .map(item => parseFloat(item.adv && item.adv.price))
-      .filter(p => !isNaN(p));
-
-    if (!precios.length) throw new Error("Sin precios válidos");
-
-    const mayorCompra = Math.max(...precios);
-    const precioVenta = Math.round(mayorCompra + MARGEN);
-
-    return new Response(JSON.stringify({
-      ok: true,
-      precio: precioVenta,
-      base: Math.round(mayorCompra),
-      margen: MARGEN,
-      moneda: "COP",
-      par: "USDT/COP",
-      enVivo: true,
-      actualizado: new Date().toISOString()
-    }), { headers: corsHeaders });
+      return new Response(JSON.stringify({
+              ok: true,
+              precio: precioVenta,
+              base: Math.round(precioCompra),
+              margen: MARGEN,
+              fuente: fuente,
+              moneda: "COP",
+              par: "USDT/COP",
+              enVivo: true,
+              actualizado: new Date().toISOString()
+      }), { headers: corsHeaders });
 
   } catch (err) {
-    // Si Binance falla, devolver precio de respaldo (la web nunca se rompe)
-    return new Response(JSON.stringify({
-      ok: false,
-      precio: PRECIO_RESPALDO,
-      moneda: "COP",
-      par: "USDT/COP",
-      enVivo: false,
-      error: err.message,
-      actualizado: new Date().toISOString()
-    }), { headers: corsHeaders });
+        return new Response(JSON.stringify({
+                ok: false,
+                precio: PRECIO_RESPALDO,
+                moneda: "COP",
+                par: "USDT/COP",
+                enVivo: false,
+                error: err.message,
+                actualizado: new Date().toISOString()
+        }), { headers: corsHeaders });
   }
 }
